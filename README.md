@@ -10,15 +10,15 @@ This repository contains code for our paper ([Backdoor Defense with Machine Unle
 
 # Instructions
 
-## Quick Start
+### Quick Start
 
 More information will quickly arrive.
 
-## Training Backdoored Model
+### Training Backdoored Model
 
 More information will quickly arrive.
 
-## Erasing Backdoor from the model using our method
+### Erasing Backdoor from the model using our method
 
 More information will quickly arrive.
 
