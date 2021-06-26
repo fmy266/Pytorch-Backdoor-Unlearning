@@ -16,10 +16,15 @@ We provide a demo for a quick start, directly running the main.py in this repo.
 python main.py
 ```
 Firstly, you need to install the above packages and enuring your environment is consistent with our environment (different environment may cause some bugs or inconsistent results of our paper).
+
 Default attack method is Badnet with the 3$times$3 trigger adopted random position and initialization, where random position is more threat than fixed position.
+
 Ideally, the accuracy and ASR of the obtained model trained with default setting (backdoored model) is about 85% and 100%.
+
 Our defense method also is included in main.py and you will see the results reported in the paper.
+
 If you want to reproduce more experiment results or used in your research, following the below instructions.
+
 
 ### Training Backdoored Model
 More information will quickly arrive.
