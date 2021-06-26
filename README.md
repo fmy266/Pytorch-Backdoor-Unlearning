@@ -10,13 +10,15 @@ This repository contains code for our paper ([Backdoor Defense with Machine Unle
 
 # Instructions
 
-More information will quickly arrive.
-
-# Training Backdoored Model
+## Quick Start
 
 More information will quickly arrive.
 
-# Erasing Backdoor from the model using our method
+## Training Backdoored Model
+
+More information will quickly arrive.
+
+## Erasing Backdoor from the model using our method
 
 More information will quickly arrive.
 
@@ -25,5 +27,3 @@ More information will quickly arrive.
 Code for NAD (Neural Attention Distillation: Erasing Backdoor Triggers from Deep Neural Networks) refer to this [site](https://gitee.com/mcdragon/NAD).
 
 Code for GAN-based defense (Defending Neural Backdoors via Generative Distribution Modeling) refer to this [site](https://github.com/superrrpotato/Defending-Neural-Backdoors-via-Generative-Distribution-Modeling).
-
-
