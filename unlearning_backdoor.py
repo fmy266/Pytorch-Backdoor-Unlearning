@@ -45,76 +45,59 @@ class UnlearningBackdoor:
 
     def unlearning_process(self):
 
-        path = "_".join(["gan_based", str(self.mark.mark_width), str(self.mark.mark_height), self.attack.name, self.dataset.name])
         optimizer = optim.SGD(self.victimized_model.parameters(), lr=1e-4, momentum=0.9, weight_decay=0)
         loss_func = torch.nn.CrossEntropyLoss()
-        loader = self.holded_dataloader
 
         cleaned_acc, posioned_acc = self.assess_model(self.victimized_model, self.test_dataloader)
-        with open("./diff_trigger_impact/{}".format(path), "a+") as f:
-            f.write("\t{attack_method}\t{defense_method}\t{epoch}\t{cleaned_acc:.2f}\t{posioned_acc:.2f}\t{ratio}\t{alpha}\n".
+        print("\t{attack_method}\t{defense_method}\t{cleaned_acc:.2f}\t{posioned_acc:.2f}\t{ratio}\t{alpha}".
                              format(attack_method=self.attack.name, defense_method=self.name,
                                     epoch=0, cleaned_acc=cleaned_acc * 100., posioned_acc=posioned_acc * 100.,
                                     ratio = self.ratio, alpha = self.alpha))
 
-        for param in self.victimized_model.parameters():
-            param.requires_grad_()
+        for param1, param2 in self.victimized_model.parameters(), self.backup.parameters():
+            param1.requires_grad_(True)
+            param2.requires_grad_(False) # backup of original model
 
-        original_cleaned_acc, original_posioned_acc = self.assess_model(self.victimized_model, self.test_dataloader)
-        cleaned_acc, posioned_acc = original_cleaned_acc, original_posioned_acc
+        # following setting of NAD for fair comparison, the default epoch is set to 10
         for epoch in range(10):
+
             self.victimized_model.train()
-            for data, label in loader:
+            for data, label in self.holded_dataloader:
                 optimizer.zero_grad()
 
-                # unlearning
-                # z = self.GM_model.G.gen_noise(label.size()[0]).cuda()
-                # trigger = self.GM_model.G(z)
-                # data, label = data.cuda(), label.cuda()
-                # cleaned_loss = loss_func(self.victimized_model(data), label)
-                #
-                # posioned_data = data.detach().clone()
-                # posioned_data = self.GM_model.add_trigger(self.GM_model.transform(
-                #     (trigger).view(-1, 1, self.GM_model.trigger_height, self.GM_model.trigger_width),
-                #     self.GM_model.dataset_stats(self.victimized_model.dataset.name)), posioned_data, 'random')
-                # posioned_loss = -loss_func(self.victimized_model(posioned_data),
-                #                            label.detach().clone().fill_(self.attack.target_class))
-                # loss = self.alpha * cleaned_loss + posioned_loss
-                # loss.backward()
-
-                # gan-based method
+                # adding clean loss
                 z = self.GM_model.G.gen_noise(label.size()[0]).cuda()
                 trigger = self.GM_model.G(z)
                 data, label = data.cuda(), label.cuda()
-                cleaned_loss = self.alpha * loss_func(self.victimized_model(data), label)
-                cleaned_loss.backward()
+                cleaned_loss = loss_func(self.victimized_model(data), label)
+                
+                # unlearning backdoor
                 posioned_data = data.detach().clone()
                 posioned_data = self.GM_model.add_trigger(self.GM_model.transform(
                     (trigger).view(-1, 1, self.GM_model.trigger_height, self.GM_model.trigger_width),
                     self.GM_model.dataset_stats(self.victimized_model.dataset.name)), posioned_data, 'random')
-                posioned_loss = loss_func(self.victimized_model( posioned_data[:int(label.size()[0] * 1)] ),
-                                           label.detach().clone()[:int(label.size()[0] * 1)])
-                posioned_loss.backward()
+                posioned_loss = -loss_func(self.victimized_model(posioned_data),
+                                           label.detach().clone().fill_(self.attack.target_class))
 
-                # for param1, param2 in zip(self.victimized_model, self.backup):
-                #     loss += 1e-6 * torch.abs(param1 - param2).sum()
+                loss = self.alpha * cleaned_loss + posioned_loss
 
+                # adding regularity item of coefficients for maintaining performance of model
+                for param1, param2 in zip(self.victimized_model, self.backup):
+                    loss += 1e-6 * torch.abs(param1 - param2).sum()
+
+                loss.backward()
                 optimizer.step()
 
-            cleaned_acc, posioned_acc = self.assess_model(self.victimized_model, self.test_dataloader)
-            with open("./diff_trigger_impact/{}".format(path), "a+") as f:
-                f.write(
-                    "\t{attack_method}\t{defense_method}\t{epoch}\t{cleaned_acc:.2f}\t{posioned_acc:.2f}\t{ratio}\t{alpha}\n".
-                    format(attack_method=self.attack.name, defense_method=self.name,
-                           epoch=0, cleaned_acc=cleaned_acc * 100., posioned_acc=posioned_acc * 100.,
-                           ratio=self.ratio, alpha=self.alpha))
+                cleaned_acc, posioned_acc = self.assess_model(self.victimized_model, self.test_dataloader)
 
-                # if posioned_acc < 0.01:
-                #     break
+                print("\t{attack_method}\t{defense_method}\t{cleaned_acc:.2f}\t{posioned_acc:.2f}\t{ratio}\t{alpha}".
+                                     format(attack_method=self.attack.name, defense_method=self.name,
+                                            cleaned_acc=cleaned_acc * 100., posioned_acc=posioned_acc * 100.,
+                                            ratio = self.ratio, alpha = self.alpha))
 
-        torch.save({"net": self.victimized_model.state_dict(), "cleaned_acc": cleaned_acc * 100., "posioned_acc": posioned_acc * 100.},
-                   "./recovered_model.pth")
+                if posioned_acc * 100 < 0.05: # set threshold for avoiding over unlearning
+                    break
 
+            if posioned_acc * 100 < 0.05:
+                break
 
-    def load(self):
-        pass
