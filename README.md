@@ -17,7 +17,7 @@ python main.py
 ```
 Firstly, you need to install the above packages and enuring your environment is consistent with our environment (different environment may cause some bugs or inconsistent results of our paper).
 
-Default attack method is Badnet with the 3$\times$3 trigger adopted random position and initialization, where random position is more threat than fixed position.
+Default attack method is Badnet with the 3 $\times$ 3 trigger adopted random position and initialization, where random position is more threat than fixed position.
 
 Ideally, the accuracy and ASR of the obtained model trained with default setting (backdoored model) is about 85% and 100%.
 
