@@ -41,4 +41,4 @@ Code for NAD (Neural Attention Distillation: Erasing Backdoor Triggers from Deep
 
 Code for GAN-based defense (Defending Neural Backdoors via Generative Distribution Modeling) refer to this [site](https://github.com/superrrpotato/Defending-Neural-Backdoors-via-Generative-Distribution-Modeling).
 
-Code for Fine-Pruning defense is integrated in the libiary [TroJanZoo](https://github.com/ain-soph/trojanzoo).
+Code for Fine-Pruning defense is integrated in the library [TroJanZoo](https://github.com/ain-soph/trojanzoo).
