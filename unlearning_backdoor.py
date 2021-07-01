@@ -49,7 +49,7 @@ class UnlearningBackdoor:
         loss_func = torch.nn.CrossEntropyLoss()
 
         cleaned_acc, posioned_acc = self.assess_model(self.victimized_model, self.test_dataloader)
-        print("\t{attack_method}\t{defense_method}\t{cleaned_acc:.2f}\t{posioned_acc:.2f}\t{ratio}\t{alpha}".
+        print("{attack_method}\t{defense_method}\t{cleaned_acc:.2f}\t{posioned_acc:.2f}\t{ratio}\t{alpha}".
                              format(attack_method=self.attack.name, defense_method=self.name,
                                     epoch=0, cleaned_acc=cleaned_acc * 100., posioned_acc=posioned_acc * 100.,
                                     ratio = self.ratio, alpha = self.alpha))
