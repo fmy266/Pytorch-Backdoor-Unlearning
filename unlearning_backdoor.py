@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # author：fmy
 import copy
-import gen_backdoor_mnist
+import gen_backdoor
 import torch
 import torch.optim as optim
 
