@@ -1,3 +1,5 @@
+This paper was accepted by INFOCOM 2022.
+
 # Pytorch-Backdoor-Unlearning
 
 This repository contains code for our paper ([Backdoor Defense with Machine Unlearning]()) implemented in Pytorch.
@@ -36,6 +38,7 @@ More information will quickly arrive.
 
 # Citing this work
 
+Liu Y, Fan M, Chen C, et al. Backdoor Defense with Machine Unlearning[J]. arXiv preprint arXiv:2201.09538, 2022.
 
 # Other source code
 
