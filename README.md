@@ -1,16 +1,19 @@
-This paper was accepted by INFOCOM 2022.
-
-# Pytorch-Backdoor-Unlearning
+## Pytorch-Backdoor-Unlearning
 
 This repository contains code for our paper ([Backdoor Defense with Machine Unlearning]()) implemented in Pytorch.
+This paper was accepted by INFOCOM 2022.
 
-# Requirements
+## Citing this work
+
+Liu Y, Fan M, Chen C, et al. Backdoor Defense with Machine Unlearning[J]. arXiv preprint arXiv:2201.09538, 2022.
+
+## Requirements
 + Python 3.9.2
 + Pytorch 1.9
 + Torchvision 0.1.8
 + Trojanvision 1.0.8
 
-# Instructions
+## Instructions
 
 ### Quick Start
 We provide a demo for a quick start, directly running the main.py in this repo.
@@ -36,11 +39,8 @@ More information will quickly arrive.
 ### Erasing Backdoor from the model using our method
 More information will quickly arrive.
 
-# Citing this work
 
-Liu Y, Fan M, Chen C, et al. Backdoor Defense with Machine Unlearning[J]. arXiv preprint arXiv:2201.09538, 2022.
-
-# Other source code
+## Other source code
 
 Code for NAD (Neural Attention Distillation: Erasing Backdoor Triggers from Deep Neural Networks) refer to this [site](https://gitee.com/mcdragon/NAD).
 
